@@ -43,7 +43,7 @@
     
     <ol type="1">
     	@foreach($product as $pro)
-    <li>{{ $pro->prod_name}}</li>
+    <li>{{ $pro->prod_name}} <b>{{ '('.$pro->name.')' }}</b></li>
     @endforeach
 </ol>
 
