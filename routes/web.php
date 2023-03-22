@@ -122,11 +122,15 @@ Route::group(['prefix' => 'c~AiN:2)Y42,&*'], function () {
 
         //tax route
         Route::resource('tax', App\Http\Controllers\Admin\TaxController::class);
+        Route::get('products/import_products',[App\Http\Controllers\Admin\ProductsController::class,'import_products'])->name('products.import_products');
+        Route::post('products/import_data',[App\Http\Controllers\Admin\ImportDataController::class,'import_data'])->name('products.import_data');
 
         /**
          * Products Route Admin
          */
         Route::resource('products', App\Http\Controllers\Admin\ProductsController::class);
+        
+
 
         Route::match(['put', 'patch'], 'productStatusUpdate',
             'App\Http\Controllers\Admin\ProductsController@productStatusUpdate')->name('productStatusUpdate');
@@ -266,9 +270,7 @@ Route::group(['prefix' => 'c~AiN:2)Y42,&*'], function () {
         Route::post('/attribute_store', 'App\Http\Controllers\Admin\AttributeController@store')->name('attribute_store');
         Route::get('/attribute_edit/{id}', 'App\Http\Controllers\Admin\AttributeController@edit')->name('attribute_edit');
         Route::post('/attribute_edit/{id}', 'App\Http\Controllers\Admin\AttributeController@edit_save')->name('attribute_edit');
-        Route::get('/attribute_destroy/{id}', 'App\Http\Controllers\Admin\AttributeController@destroy');
-
-
+        Route::get('/attribute_destroy/{id}', 'App\Http\Controllers\Admin\AttributeController@destroy');       
 
 
     });
