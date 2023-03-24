@@ -77,9 +77,6 @@ class ImportDataController extends Controller
                 //description data
                 $description = $data[16];
                 $productData['prod_description'] = $description;
-                // product name
-                // $title = $data[14];
-                // $productData['prod_name'] = $title;
                 //product slug
                 $slug = Str::slug($name);
                 $productData['prod_slug'] = $slug;
@@ -149,10 +146,7 @@ class ImportDataController extends Controller
                 //description data
                 $description = $data[16];
                 $productData['prod_description'] = $description;
-                // //product name
-                // $title = $data[14];
-                // $productData['prod_name'] = $title;
-                // //product slug
+                //product slug
                 $slug = Str::slug($name);
                 $productData['prod_slug'] = $slug;
                 //seller id data
