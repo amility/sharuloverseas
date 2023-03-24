@@ -31,132 +31,144 @@ class ImportDataController extends Controller
                 continue;
             }
             if ($selectedSellerId == 1) { //DAVIDSONS 
+                //Name data
+                $productData['prod_name'] = $data[0];
                 //category data
-                $productData['category_id'] = $this->getCategoryId($data[0]);
+                $productData['category_id'] = $this->getCategoryId($data[1]);
                 //subcategory data
-                $productData['sub_category_id'] = $this->getSubCategoryId($data[1], $productData['category_id']);
+                $productData['sub_category_id'] = $this->getSubCategoryId($data[2], $productData['category_id']);
                 //brand data
-                $productData['brand_id'] = $this->getBrandId($data[2]);
+                $productData['brand_id'] = $this->getBrandId($data[3]);
                 //caliber data
-                $productData['caliber_id'] =  $this->getClibarId($data[3]);
+                $productData['caliber_id'] = $this->getClibarId($data[4]);
                 //weight data
-                $productData['weight_id'] = $this->getWeightId($data[4]);
+                $productData['weight_id'] = $this->getWeightId($data[5]);
                 //sku data
-                $sku = $data[5];
+                $sku = $data[6];
                 $productData['prod_sku'] = $sku;
                 // mrp  ce data
-                $reqPrice = $data[6];
+                $reqPrice = $data[7];
                 $productData['mrp_price'] = $reqPrice;
                 // sale price data
-                $salePrice = $data[7];
+                $salePrice = $data[8];
                 $productData['prod_price'] = $salePrice;
                 // total stock data
-                $totalStock = $data[8];
+                $totalStock = $data[9];
                 $productData['total_stock'] = $totalStock;
                 // Video Url data
-                $videoUrl = $data[9];
+                $videoUrl = $data[10];
                 $productData['prod_video_url'] = $videoUrl;
                 // New arrival data
-                $newArrival = $data[10];
-                $productData['new_arrival'] = ($newArrival=='')?0:$newArrival;
+                $newArrival = $data[11];
+                $productData['new_arrival'] = ($newArrival == '') ? 0 : $newArrival;
                 //best seller data
-                $bestSeller = $data[11];
-                $productData['best_seller'] = ($bestSeller=='')?0:$bestSeller;
+                $bestSeller = $data[12];
+                $productData['best_seller'] = ($bestSeller == '') ? 0 : $bestSeller;
                 //featured data
-                $featured = $data[12];
-                $productData['featured'] = ($featured=='')?0:$featured;
+                $featured = $data[13];
+                $productData['featured'] = ($featured == '') ? 0 : $featured;
+                //status data
+                $status = $data[14];
+                $productData['is_active'] = ($status == '') ? 1 : $status;
                 //specs data
-                $specsData = $data[13];
+                $specsData = $data[15];
                 $productData['prod_specification'] = $specsData;
                 //description data
-                $description = $data[14];
+                $description = $data[16];
                 $productData['prod_description'] = $description;
-                //product name
-                $title = $data[14];
-                $productData['prod_name'] = $title;
+                // product name
+                // $title = $data[14];
+                // $productData['prod_name'] = $title;
                 //product slug
-                $slug = Str::slug($title);
-                $productData['prod_slug'] = $slug;
+                // $slug = Str::slug($title);
+                // $productData['prod_slug'] = $slug;
+                //seller id data
                 $productData['seller_id'] = $selectedSellerId;
                 $match = ['seller_id' => $selectedSellerId, 'prod_sku' => $sku];
                 $productObj = Products::updateOrCreate($match, $productData);
 
-                $image = $data[15];
+                $image = $data[17];
                 if (!empty($image)) {
                     $contents = file_get_contents($image);
-                    $fileName =  time() . '_' . substr($image, strrpos($image, '/') + 1);
+                    $fileName = time() . '_' . substr($image, strrpos($image, '/') + 1);
                     $sourcePath = '/product_images/' . $fileName;
                     Storage::disk('public')->put($sourcePath, $contents);
                     $productImagesk['image'] = '/product_images/' . $fileName;
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
                 } else {
-                    $productImagesk['image'] = ' /product_images/1667993825_1.jpg';
+                    $productImagesk['image'] = '/product_images/1667993825_1.jpg';
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
                 }
             } elseif ($selectedSellerId == 2) {
+                //Name data
+                $productData['prod_name'] = $data[0];
                 //category data
-                $productData['category_id'] = $this->getCategoryId($data[0]);
+                $productData['category_id'] = $this->getCategoryId($data[1]);
                 //subcategory data
-                $productData['sub_category_id'] = $this->getSubCategoryId($data[1], $productData['category_id']);
+                $productData['sub_category_id'] = $this->getSubCategoryId($data[2], $productData['category_id']);
                 //brand data
-                $productData['brand_id'] = $this->getBrandId($data[2]);
+                $productData['brand_id'] = $this->getBrandId($data[3]);
                 //caliber data
-                $productData['caliber_id'] =  $this->getClibarId($data[3]);
+                $productData['caliber_id'] = $this->getClibarId($data[4]);
                 //weight data
-                $productData['weight_id'] = $this->getWeightId($data[4]);
+                $productData['weight_id'] = $this->getWeightId($data[5]);
                 //sku data
-                $sku = $data[5];
+                $sku = $data[6];
                 $productData['prod_sku'] = $sku;
                 // mrp price data
-                $reqPrice = $data[6];
+                $reqPrice = $data[7];
                 $productData['mrp_price'] = $reqPrice;
                 // sale price data
-                $salePrice = $data[7]->getCalculatedValue();
+                $salePrice = $data[8]->getCalculatedValue();
                 $productData['prod_price'] = $salePrice;
                 // total stock data
-                $totalStock = $data[8];
+                $totalStock = $data[9];
                 $productData['total_stock'] = $totalStock;
                 // Video Url data
-                $videoUrl = $data[9];
+                $videoUrl = $data[10];
                 $productData['prod_video_url'] = $videoUrl;
                 // New arrival data
-                $newArrival = $data[10];
-                $productData['new_arrival'] = ($newArrival=='')?0:$newArrival;
+                $newArrival = $data[11];
+                $productData['new_arrival'] = ($newArrival == '') ? 0 : $newArrival;
                 //best seller data
-                $bestSeller = $data[11];
-                $productData['best_seller'] = ($bestSeller=='')?0:$bestSeller;
+                $bestSeller = $data[12];
+                $productData['best_seller'] = ($bestSeller == '') ? 0 : $bestSeller;
                 //featured data
-                $featured = $data[12];
-                $productData['featured'] = ($featured=='')?0:$featured;;
+                $featured = $data[13];
+                $productData['featured'] = ($featured == '') ? 0 : $featured;
+                ;
+                 //status data
+                 $status = $data[14];
+                 $productData['is_active'] = ($status == '') ? 1 : $status;
                 //specs data
-                $specsData = $data[13];
+                $specsData = $data[15];
                 $productData['prod_specification'] = $specsData;
                 //description data
-                $description = $data[14];
+                $description = $data[16];
                 $productData['prod_description'] = $description;
-                //product name
-                $title = $data[14];
-                $productData['prod_name'] = $title;
-                //product slug
-                $slug = Str::slug($title);
-                $productData['prod_slug'] = $slug;
-                //seller id
+                // //product name
+                // $title = $data[14];
+                // $productData['prod_name'] = $title;
+                // //product slug
+                // $slug = Str::slug($title);
+                // $productData['prod_slug'] = $slug;
+                 //seller id data
                 $productData['seller_id'] = $selectedSellerId;
                 $match = ['seller_id' => $selectedSellerId, 'prod_sku' => $sku];
                 $productObj = Products::updateOrCreate($match, $productData);
-                $image = $data[15];
+                $image = $data[17];
                 if (!empty($image)) {
                     $contents = file_get_contents($image);
-                    $fileName =  time() . '_' . substr($image, strrpos($image, '/') + 1);
+                    $fileName = time() . '_' . substr($image, strrpos($image, '/') + 1);
                     $sourcePath = '/product_images/' . $fileName;
                     Storage::disk('public')->put($sourcePath, $contents);
                     $productImagesk['image'] = '/product_images/' . $fileName;
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
                 } else {
-                    $productImagesk['image'] = ' /product_images/1667993825_1.jpg';
+                    $productImagesk['image'] = '/product_images/1667993825_1.jpg';
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
                 }
