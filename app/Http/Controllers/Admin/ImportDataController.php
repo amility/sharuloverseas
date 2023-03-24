@@ -32,7 +32,8 @@ class ImportDataController extends Controller
             }
             if ($selectedSellerId == 1) { //DAVIDSONS 
                 //Name data
-                $productData['prod_name'] = $data[0];
+                $name = $data[0];
+                $productData['prod_name'] = $name;
                 //category data
                 $productData['category_id'] = $this->getCategoryId($data[1]);
                 //subcategory data
@@ -80,8 +81,8 @@ class ImportDataController extends Controller
                 // $title = $data[14];
                 // $productData['prod_name'] = $title;
                 //product slug
-                // $slug = Str::slug($title);
-                // $productData['prod_slug'] = $slug;
+                $slug = Str::slug($name);
+                $productData['prod_slug'] = $slug;
                 //seller id data
                 $productData['seller_id'] = $selectedSellerId;
                 $match = ['seller_id' => $selectedSellerId, 'prod_sku' => $sku];
@@ -103,7 +104,8 @@ class ImportDataController extends Controller
                 }
             } elseif ($selectedSellerId == 2) {
                 //Name data
-                $productData['prod_name'] = $data[0];
+                $name = $data[0];
+                $productData['prod_name'] = $name;
                 //category data
                 $productData['category_id'] = $this->getCategoryId($data[1]);
                 //subcategory data
@@ -138,10 +140,9 @@ class ImportDataController extends Controller
                 //featured data
                 $featured = $data[13];
                 $productData['featured'] = ($featured == '') ? 0 : $featured;
-                ;
-                 //status data
-                 $status = $data[14];
-                 $productData['is_active'] = ($status == '') ? 1 : $status;
+                //status data
+                $status = $data[14];
+                $productData['is_active'] = ($status == '') ? 1 : $status;
                 //specs data
                 $specsData = $data[15];
                 $productData['prod_specification'] = $specsData;
@@ -152,9 +153,9 @@ class ImportDataController extends Controller
                 // $title = $data[14];
                 // $productData['prod_name'] = $title;
                 // //product slug
-                // $slug = Str::slug($title);
-                // $productData['prod_slug'] = $slug;
-                 //seller id data
+                $slug = Str::slug($name);
+                $productData['prod_slug'] = $slug;
+                //seller id data
                 $productData['seller_id'] = $selectedSellerId;
                 $match = ['seller_id' => $selectedSellerId, 'prod_sku' => $sku];
                 $productObj = Products::updateOrCreate($match, $productData);
