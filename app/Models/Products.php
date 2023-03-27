@@ -62,7 +62,8 @@ class Products extends Model
         'back_image',
         'left_image',
         'right_image',
-        'custom_product'
+        'custom_product',
+        'seller_id'
         
     ];
 
