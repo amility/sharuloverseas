@@ -14,26 +14,25 @@ class SellerImport implements ToModel
      */
     public function model(array $row)
     {
-        if ($row[0] === 'CATEGORY') {
-            return null;
-        }
         return new seller_data([
-            'CATEGORY' => $row[0],
-            'SUB CATGORY' => $row[1],
-            'BRAND' => $row[2],
-            'CALIBER' => $row[3],
-            'WEIGHT' => $row[4],
-            'SKU' => $row[5],
-            'REG PRICE' => $row[6],
-            'SALE PRICE' => $row[7],
-            'TOTAL STOCK' => $row[8],
-            'VIDEO URL' => $row[9],
-            'NEW ARRIVAL' => $row[10],
-            'BEST SELLER' => $row[11],
-            'FEATURED' => $row[12],
-            'SPECS' => $row[13],
-            'DESCRIPTION' => $row[14],
-            'IMAGE' => $row[15],
+            'NAME' =>$row[0],
+            'CATEGORY' => $row[1],
+            'SUB CATGORY' => $row[2],
+            'BRAND' => $row[3],
+            'CALIBER' => $row[4],
+            'WEIGHT' => $row[5],
+            'SKU' => $row[6],
+            'REG PRICE' => $row[7],
+            'SALE PRICE' => $row[8],
+            'TOTAL STOCK' => $row[9],
+            'VIDEO URL' => $row[10],
+            'NEW ARRIVAL' => $row[11],
+            'BEST SELLER' => $row[12],
+            'FEATURED' => $row[13],
+            'STATUS' => $row[14],
+            'SPECS' => $row[15],
+            'DESCRIPTION' => $row[16],
+            'IMAGE' => $row[17],
           
 
         ]);

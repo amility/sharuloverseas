@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\db;
 use Storage;
 use Excel;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
 class ImportDataController extends Controller
 {
@@ -24,16 +25,17 @@ class ImportDataController extends Controller
         $imported_data = Excel::toArray(new SellerData, $request->file('import_product'));
         $imported_data = $imported_data[0];
         $i = 0;
+
         foreach ($imported_data as $data) {
 
-            if ($i == 0 || empty($data[14])) { //skip heading row
+            if ($i == 0 || empty($data[0])) { //skip heading row  
                 $i++;
                 continue;
             }
             if ($selectedSellerId == 1) { //DAVIDSONS 
                 //Name data
                 $name = $data[0];
-                $productData['prod_name'] = $name;
+                $productData['prod_name'] = 'name';
                 //category data
                 $productData['category_id'] = $this->getCategoryId($data[1]);
                 //subcategory data
@@ -51,7 +53,7 @@ class ImportDataController extends Controller
                 $reqPrice = $data[7];
                 $productData['mrp_price'] = $reqPrice;
                 // sale price data
-                $salePrice = $data[8];
+                $salePrice = $data[8]->getCalculatedValue();
                 $productData['prod_price'] = $salePrice;
                 // total stock data
                 $totalStock = $data[9];
@@ -93,10 +95,14 @@ class ImportDataController extends Controller
                     Storage::disk('public')->put($sourcePath, $contents);
                     $productImagesk['image'] = '/product_images/' . $fileName;
                     $productImagesk['product_id'] = $productObj->id;
+                    echo "cdc1";
+                    die();
                     ProductImages::create($productImagesk);
                 } else {
                     $productImagesk['image'] = '/product_images/1667993825_1.jpg';
                     $productImagesk['product_id'] = $productObj->id;
+                    echo "cdc2";
+                    die();
                     ProductImages::create($productImagesk);
                 }
             } elseif ($selectedSellerId == 2) {
@@ -166,6 +172,7 @@ class ImportDataController extends Controller
                     $productImagesk['image'] = '/product_images/1667993825_1.jpg';
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
+
                 }
             }
         }
