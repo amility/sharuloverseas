@@ -15,16 +15,29 @@ use Illuminate\Support\Facades\db;
 use Storage;
 use Excel;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
 class ImportDataController extends Controller
 {
     public function import_data(Request $request)
     {
+        $i = 0;
+        $excelFile = $request->file('import_product');
+        $excelFilePath = $excelFile->store('temp');
+        $spreadsheet = IOFactory::load($excelFilePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+        for ($row = 2; $row <= $worksheet->getHighestRow(); $row++) {
+            for ($col = 'A'; $col <= $worksheet->getHighestColumn(); $col++) {
+                $cellValue = $worksheet->getCell('A' . $row)->getCalculatedValue();
+                // Perform necessary calculations on $cellValue
+            }
+        }
+        exit;
         $selectedSellerId = $request->input('seller_id');
         $imported_data = Excel::toArray(new SellerData, $request->file('import_product'));
         $imported_data = $imported_data[0];
         $i = 0;
-    
+
         foreach ($imported_data as $data) {
 
             if ($i == 0) { //skip heading row  || empty($data[0])
@@ -167,7 +180,6 @@ class ImportDataController extends Controller
                     $productImagesk['image'] = '/product_images/1667993825_1.jpg';
                     $productImagesk['product_id'] = $productObj->id;
                     ProductImages::create($productImagesk);
-
                 }
             }
         }
