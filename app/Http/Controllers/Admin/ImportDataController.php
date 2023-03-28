@@ -38,20 +38,19 @@ class ImportDataController extends Controller
         $selectedSellerId = $request->input('seller_id');
         $worksheet = $spreadsheet->getActiveSheet();
         for ($row = 2; $row <= $worksheet->getHighestRow(); $row++) {
-            
+
             if ($selectedSellerId == 1) { //DAVIDSONS 
                 $name = $worksheet->getCell('A' . $row)->getValue();
                 $description = $worksheet->getCell('Q' . $row)->getValue();
                 if (empty($name)) {
                     $name = $description;
                 }
-                if(!empty( $name))
-                {
+                if (!empty($name)) {
                     $productData['prod_name'] =  $name;
                     $productData['category_id'] = $this->getCategoryId($worksheet->getCell('B' . $row)->getValue());
                     $productData['sub_category_id'] = $this->getSubCategoryId($worksheet->getCell('C' . $row)->getValue(), $productData['category_id']);
                     $productData['brand_id'] = $this->getBrandId($worksheet->getCell('D' . $row)->getValue());
-                   //caliber data
+                    //caliber data
                     $productData['caliber_id'] = $this->getClibarId($worksheet->getCell('E' . $row)->getValue());
                     //weight data
                     $productData['weight_id'] = $this->getWeightId($worksheet->getCell('F' . $row)->getValue());
@@ -86,7 +85,7 @@ class ImportDataController extends Controller
                     $specsData = $worksheet->getCell('P' . $row)->getValue();
                     $productData['prod_specification'] = $specsData;
                     //description data
-    
+
                     $productData['prod_description'] = $description;
                     //product slug
                     $slug = Str::slug($name);
@@ -94,7 +93,7 @@ class ImportDataController extends Controller
                     //seller id data
                     $productData['seller_id'] = $selectedSellerId;
                     $match = ['seller_id' => $selectedSellerId, 'prod_sku' => $sku];
-                   
+
                     $productObj = Products::updateOrCreate($match, $productData);
                     $technicalData['technical_bullets1'] = $request->get('technical_bullets1');
                     $technicalData['technical_bullets2'] = $request->get('technical_bullets2');
@@ -113,7 +112,7 @@ class ImportDataController extends Controller
                     $technicalData['technical_bullets15'] = $request->get('technical_bullets15');
                     $technicalData['product_id'] = $productObj->id;
                     $match = ['product_id' => $productObj->id,];
-                    TechnicalBulletsModel::updateOrCreate($match,$technicalData);
+                    TechnicalBulletsModel::updateOrCreate($match, $technicalData);
                     $image = $worksheet->getCell('R' . $row)->getValue();
                     if (!empty($image)) {
                         //echo "\nimage".$image;
@@ -131,7 +130,6 @@ class ImportDataController extends Controller
                         ProductImages::create($productImagesk);
                     }
                 }
-               
             } elseif ($selectedSellerId == 2) {
                 //Name data
                 $name = $worksheet->getCell('A' . $row)->getValue();
@@ -139,8 +137,7 @@ class ImportDataController extends Controller
                 if (empty($name)) {
                     $name = $description;
                 }
-                if(!empty($name))
-                {
+                if (!empty($name)) {
                     $productData['prod_name'] = $name;
                     //category data
                     $productData['category_id'] = $this->getCategoryId($worksheet->getCell('B' . $row)->getValue());
@@ -208,9 +205,7 @@ class ImportDataController extends Controller
                         ProductImages::create($productImagesk);
                     }
                 }
-                
             }
-            
         }
         session()->flash('success', 'Product added successfully!');
         return back();
@@ -257,7 +252,7 @@ class ImportDataController extends Controller
 
         if (empty($brandObj)) {
             $brandObj = DB::table('brands')
-                ->whereRaw('brand_name', 'Other')
+                ->whereRaw('LOWER(TRIM(brand_name))=?', [strtolower(trim('Other'))])
                 ->first();
             if (empty($brandObj)) {
                 $brandObj = Brands::create(['brand_name' => 'Other', 'brand_slug' => 'other', 'is_active' => 1]);
@@ -272,12 +267,8 @@ class ImportDataController extends Controller
             ->whereRaw('caliber_name', $caliberName)
             ->first();
         if (empty($caliberObj)) {
-            $caliberObj = DB::table('caliber')
-                ->whereRaw('caliber_name', 'Other')
-                ->first();
-            if (empty($caliberObj)) {
-                $caliberObj = Caliber::create(['caliber_name' => 'Other', 'caliber_slug' => 'other', 'is_active' => 1]);
-            }
+            $slug = Str::slug($caliberName);
+            $caliberObj = Caliber::create(['caliber_name' => $caliberName, 'caliber_slug' => $slug, 'is_active' => 1]);
         }
         return $caliberObj->id;
     }
@@ -290,7 +281,7 @@ class ImportDataController extends Controller
 
         if (empty($weightObj)) {
             $weightObj = DB::table('weight')
-                ->whereRaw('weight_name', 'Other')
+                ->whereRaw('LOWER(TRIM(weight_name))=?', [strtolower(trim('Other'))])
                 ->first();
             if (empty($weightObj)) {
                 $weightObj = Weight::create(['weight_name' => 'Other']);
