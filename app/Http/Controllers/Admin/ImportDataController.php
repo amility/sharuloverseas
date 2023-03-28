@@ -15,24 +15,29 @@ use Illuminate\Support\Facades\db;
 use Storage;
 use Excel;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
-
 class ImportDataController extends Controller
 {
     public function import_data(Request $request)
     {
-        $i = 0;
         $excelFile = $request->file('import_product');
         $excelFilePath = $excelFile->store('temp');
         $spreadsheet = IOFactory::load($excelFilePath);
+        print_r($excelFilePath);
+        die();
         $worksheet = $spreadsheet->getActiveSheet();
         for ($row = 2; $row <= $worksheet->getHighestRow(); $row++) {
-            for ($col = 'A'; $col <= $worksheet->getHighestColumn(); $col++) {
-                $cellValue = $worksheet->getCell('A' . $row)->getCalculatedValue();
-                // Perform necessary calculations on $cellValue
-            }
+            // for ($col = 'A'; $col <= $worksheet->getHighestColumn(); $col++) {
+            //     $cellValue = $worksheet->getCell('A' . $row)->getCalculatedValue();
+            //     // Perform necessary calculations on $cellValue
+            // }
+            $cellValue = $worksheet->getCell('I')->getValue();
+            dd($cellValue);
+
         }
-        exit;
+
+        die();
         $selectedSellerId = $request->input('seller_id');
         $imported_data = Excel::toArray(new SellerData, $request->file('import_product'));
         $imported_data = $imported_data[0];
