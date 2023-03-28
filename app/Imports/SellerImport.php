@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\seller_data;
 use Maatwebsite\Excel\Concerns\ToModel;
+//use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
 class SellerImport implements ToModel
 {
@@ -15,7 +16,7 @@ class SellerImport implements ToModel
     public function model(array $row)
     {
         return new seller_data([
-            'NAME' =>$row[0],
+            'NAME' => $row[0],
             'CATEGORY' => $row[1],
             'SUB CATGORY' => $row[2],
             'BRAND' => $row[3],
@@ -33,7 +34,7 @@ class SellerImport implements ToModel
             'SPECS' => $row[15],
             'DESCRIPTION' => $row[16],
             'IMAGE' => $row[17],
-          
+
 
         ]);
     }
