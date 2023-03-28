@@ -51,8 +51,7 @@ class ImportDataController extends Controller
                     $productData['category_id'] = $this->getCategoryId($worksheet->getCell('B' . $row)->getValue());
                     $productData['sub_category_id'] = $this->getSubCategoryId($worksheet->getCell('C' . $row)->getValue(), $productData['category_id']);
                     $productData['brand_id'] = $this->getBrandId($worksheet->getCell('D' . $row)->getValue());
-    
-                    //caliber data
+                   //caliber data
                     $productData['caliber_id'] = $this->getClibarId($worksheet->getCell('E' . $row)->getValue());
                     //weight data
                     $productData['weight_id'] = $this->getWeightId($worksheet->getCell('F' . $row)->getValue());
