@@ -247,7 +247,7 @@ class ImportDataController extends Controller
     private function getBrandId($brandName)
     {
         $brandObj = DB::table('brands')
-            ->whereRaw('brand_name', [strtolower(trim($brandName))])
+            ->whereRaw('LOWER(TRIM(brand_name))=?', [strtolower(trim($brandName))])
             ->first();
 
         if (empty($brandObj)) {
@@ -263,8 +263,9 @@ class ImportDataController extends Controller
 
     private function getClibarId($caliberName)
     {
+
         $caliberObj = DB::table('caliber')
-            ->whereRaw('caliber_name', $caliberName)
+            ->whereRaw('LOWER(TRIM(caliber_name))=?', [strtolower(trim($caliberName))])
             ->first();
         if (empty($caliberObj)) {
             $slug = Str::slug($caliberName);
@@ -276,7 +277,7 @@ class ImportDataController extends Controller
     private function getWeightId($weightName)
     {
         $weightObj = DB::table('weight')
-            ->whereRaw('weight_name', $weightName)
+            ->whereRaw('LOWER(TRIM(weight_name))=?', [strtolower(trim($weightName))])
             ->first();
 
         if (empty($weightObj)) {
