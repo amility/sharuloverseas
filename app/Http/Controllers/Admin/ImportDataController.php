@@ -17,6 +17,7 @@ use Excel;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+
 class ImportDataController extends Controller
 {
     public function import_data(Request $request)
@@ -28,16 +29,10 @@ class ImportDataController extends Controller
         die();
         $worksheet = $spreadsheet->getActiveSheet();
         for ($row = 2; $row <= $worksheet->getHighestRow(); $row++) {
-            // for ($col = 'A'; $col <= $worksheet->getHighestColumn(); $col++) {
-            //     $cellValue = $worksheet->getCell('A' . $row)->getCalculatedValue();
-            //     // Perform necessary calculations on $cellValue
-            // }
-            $cellValue = $worksheet->getCell('I')->getValue();
-            dd($cellValue);
+
+
 
         }
-
-        die();
         $selectedSellerId = $request->input('seller_id');
         $imported_data = Excel::toArray(new SellerData, $request->file('import_product'));
         $imported_data = $imported_data[0];
